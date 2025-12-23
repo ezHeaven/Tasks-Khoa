@@ -7,6 +7,7 @@ using namespace std;
  * @param m - значение массы
  * @param t_0 - значение начальной температуры
  * @param t - значение конечной температуры
+ * @return - возвращает значение количества выделенной теплоты
  */
 float calculateQ(const float c, float m, float t_0, float t);
 
