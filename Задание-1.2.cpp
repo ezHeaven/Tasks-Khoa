@@ -6,7 +6,8 @@ using namespace std;
  * @brief вычисляет пройденный путь
  * @param v - значение скорости
  * @param v_river - значение скорости течения
- * @param t -значение времи
+ * @param t -значение времени
+ * @return - возвращает значение пройденного пути
  */
 float calculateS(float v, float v_river, float t);
 
