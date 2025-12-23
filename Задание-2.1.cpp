@@ -8,6 +8,7 @@ using namespace std;
  * @param b - значение числа b
  * @param c - значение числа c
  * @param count - счётчик
+ * @return - возвращает количество отрицательных чисел
  */
 float calculate_negative_numbers(float a, float b, float c);
 
@@ -17,6 +18,7 @@ float calculate_negative_numbers(float a, float b, float c);
  * @param a - значение числа a
  * @param b - значение числа b
  * @param c - значение числа c
+ * @return - возвращает абсолютное значение суммы чисел
  */
 float calculate_abs_sum(float a, float b, float c);
 
@@ -57,7 +59,6 @@ float calculate_negative_numbers(float a, float b, float c) {
     else if (c < 0) {
         count += 1;
     }
-    
     return count;
 }
 
