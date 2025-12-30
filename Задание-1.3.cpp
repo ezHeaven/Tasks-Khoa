@@ -9,7 +9,7 @@ using namespace std;
  * @param t - значение конечной температуры
  * @return - возвращает значение количества выделенной теплоты
  */
-float calculateQ(const float c, float m, float t_0, float t);
+float calculateQ(const float c, const float m, const float t_0, const float t);
 
 
 /**
@@ -22,7 +22,7 @@ int main() {
 
 
     // ввод данных
-    float m, t_0, t;
+    float m = 0, t_0 = 0, t = 0;
     cin >> m >> t_0 >> t;
     cout << "Введите исходные данные: " << m << " " << t_0 << " " << t << endl;
     
@@ -36,6 +36,6 @@ int main() {
 }
 
 
-float calculateQ(const float c, float m, float t_0, float t) {
+float calculateQ(const float c, const float m, const float t_0, const float t) {
     return c * m * (t - t_0);
 }
