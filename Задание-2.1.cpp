@@ -10,7 +10,7 @@ using namespace std;
  * @param count - счётчик
  * @return - возвращает количество отрицательных чисел
  */
-float calculate_negative_numbers(float a, float b, float c);
+float calculate_negative_numbers(const float a, const float b, const float c);
 
 
 /**
@@ -20,7 +20,7 @@ float calculate_negative_numbers(float a, float b, float c);
  * @param c - значение числа c
  * @return - возвращает абсолютное значение суммы чисел
  */
-float calculate_abs_sum(float a, float b, float c);
+float calculate_abs_sum(const float a, const float b, const float c);
 
 
 /**
@@ -29,7 +29,7 @@ float calculate_abs_sum(float a, float b, float c);
  */
 int main() {
     // ввод чисел
-    float a, b, c;
+    float a = 0, b = 0, c = 0;
     cin >> a >> b >> c;
     cout << "Введите числа: " << a << " " << b << " " << c << endl;
 
@@ -45,10 +45,13 @@ int main() {
     // результаты вычислений
     cout << "Количество отрицательных чисел: " << negative_numbers << endl;
     cout << "Абсолютное значение суммы этих чисел: " << abs_sum;
+
+
+    return 0;
 }
 
 
-float calculate_negative_numbers(float a, float b, float c) {
+float calculate_negative_numbers(const float a, const float b, const float c) {
     float count = 0;
     if (a < 0) {
         count += 1;
@@ -63,6 +66,6 @@ float calculate_negative_numbers(float a, float b, float c) {
 }
 
 
-float calculate_abs_sum(float a, float b, float c) {
+float calculate_abs_sum(const float a, const float b, const float c) {
     return abs(a + b + c);
 }
