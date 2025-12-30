@@ -8,7 +8,7 @@ using namespace std;
  * @param x - значение вводимое пользователем
  * @return значение функции y в точке x
  */
-double calculate(double x);
+double calculateY(const double x);
 
 
 /**
@@ -17,7 +17,7 @@ double calculate(double x);
  */
 int main() {
     // ввод данных
-    double a, b, h;
+    double a = 0, b = 0, h = 0;
     cin >> a >> b >> h;
 
 
@@ -51,7 +51,7 @@ int main() {
     cout << fixed << setprecision(4); // Устанавливаем точность вывода
     for (double x = a; x <= b; x += h) {
         count += 1;
-        double y = calculate(x);
+        double y = calculateY(x);
 
         // вывод значения с форматированием
         cout << "| " << setw(11) << x << " | ";
@@ -85,7 +85,7 @@ int main() {
     int test_count = 0;
     for (double test_x = test_a; test_x <= test_b; test_x += test_h) {
         test_count += 1;
-        double test_y = calculate(test_x);
+        double test_y = calculateY(test_x);
 
         // вывод значения с форматированием
         cout << "| " << setw(11) << test_x << " | ";
@@ -104,6 +104,6 @@ int main() {
 }
 
 
-double calculate(double x) {
+double calculateY(const double x) {
     return sqrt(1 - x) - tan(x);
 }
