@@ -27,6 +27,6 @@ int main() {
     cout << "Пройденный путь: " << s << endl;
     return 0;
 }
-float calculateS(float v, float v_river, float t) {
+float calculateS(const float v, const float v_river, const float t) {
     return (v + v_river) * t;
 }
