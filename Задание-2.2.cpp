@@ -9,7 +9,7 @@ using namespace std;
  * @param x - переменная вводимая пользователем
  * @return - значение функции
  */
-float calculateY(float x);
+float calculateY(const float x);
 
 
 /** 
@@ -18,7 +18,7 @@ float calculateY(float x);
 */
 int main() {
     // ввод данных
-    float x;
+    float x = 0;
     cin >> x;
     cout << "Введите переменную х: " << x << endl;
     
@@ -34,13 +34,15 @@ int main() {
     float y = calculateY(x);
 
 
-    // вывод значения фукнции
+    // вывод значения фукнции y
     cout << "Ответ: " << y;
     
+
+    return 0;
 }
 
 
-float calculateY(float x) {
+float calculateY(const float x) {
     const float a = 1.36;
     float y = 0;
     if (x < 0.5) {
