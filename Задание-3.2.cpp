@@ -9,7 +9,7 @@ using namespace std;
  * @param e - число вводимое пользователем
  * @return - возращает значение по которому определяется правильность ввода
  */
-double fail(double e);
+double fail(const double e);
 
 
 /**
@@ -17,7 +17,7 @@ double fail(double e);
  * @param n - число для которого нужно посчитать факториал
  * @return - возвращает факториал числа
  */
-double factorial(int n);
+double factorial(const int n);
 
 
 /**
@@ -25,7 +25,7 @@ double factorial(int n);
  * @param n - номер члена ряда для которого нужно посчитать значение
  * @return - возвращает значение члена ряда
  */
-double calculate(int n);
+double calculate(const int n);
 
 
 /**
@@ -34,8 +34,8 @@ double calculate(int n);
  */
 int main() {
     // ввод данных
-    int n;
-    double e;
+    int n = 0;
+    double e = 0;
     cin >> n >> e;
     
 
@@ -74,7 +74,7 @@ int main() {
 }
 
 
-double factorial(int n) {
+double factorial(const int n) {
     if (n == 0 || n == 1) {
         return 1;
     }
@@ -82,12 +82,12 @@ double factorial(int n) {
 }
 
 
-double calculate(int n) {
+double calculate(const int n) {
     return pow(-1, n) * ((1 + n) / factorial(n));
 }
 
 
-double fail(double e) {
+double fail(const double e) {
     if (e < 0) {
         return 1;
     }
