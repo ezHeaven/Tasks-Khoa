@@ -11,7 +11,7 @@ using namespace std;
  * @param s - ширина второго дома
  * @return - возращает начение по которому будем проверять возможность размещения домов на участке
  */
-float calculate_posibility(float a, float b, float p, float q, float r, float s);
+float calculate_posibility(const float a, const float b, const float p, const float q, const float r, const float s);
 
 
 /**
@@ -20,7 +20,7 @@ float calculate_posibility(float a, float b, float p, float q, float r, float s)
  */
 int main() {
     // ввод данных
-    float a, b, p, q, r, s;
+    float a = 0, b = 0, p = 0, q = 0, r = 0, s = 0;
     cin >> a >> b >> p >> q >> r >> s;
 
 
