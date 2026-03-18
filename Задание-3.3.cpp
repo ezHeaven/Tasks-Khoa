@@ -207,17 +207,16 @@ double getSum(const double a, const double eps, const int maxIterations) {
     int k = 1;  // Номер текущего элемента (начиная с 1 для второго элемента)
 
     while (k < maxIterations) {
-        // Вычисляем следующий элемент (ошибку расчета)
         double nextElem = nextElement(element, a, k);
 
-        // Сравниваем ошибку расчета с эпсилон
-        if (fabs(nextElem) <= eps) {
-            break;  // Достигнута требуемая точность
-        }
-
-        // Добавляем элемент к сумме
         element = nextElem;
         sum += element;
+
+        // Проверяем реальную погрешность
+        if (fabs(getFunc(a) - sum) <= eps) {
+            break;
+        }
+
         k++;
     }
 
