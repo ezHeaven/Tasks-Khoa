@@ -66,7 +66,7 @@ void replaceFirstMultipleOfFive(int* arr, size_t size);
 * @param num - число для извлечения цифры
 * @return первая цифра числа
 */
-int getFirstDigit(int num);
+int getFirstDigit(const int num);
 
 /**
 * @brief Вставляет элемент K после всех нечетных элементов, начинающихся на цифру K
@@ -76,7 +76,7 @@ int getFirstDigit(int num);
 * @param newSize - [out] переменная для записи размера нового массива
 * @return новый динамический массив с вставленными числами K
 */
-int* insertKAfterOddStartingWithK(const int* arr, size_t size, const int k, size_t &newSize);
+int* insertKAfterOddStartingWithK(const int* arr, const size_t size, const int k, size_t &newSize);
 
 /**
 * @brief Создает массив M из массива P по заданному правилу
