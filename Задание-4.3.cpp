@@ -81,17 +81,19 @@ int findMinElement(int* const* const array, const size_t n, const size_t m);
 void replaceMaxWithColumnNumber(int** array, const size_t n, const size_t m);
 
 /**
- * @brief Создает новый массив с вставленными строками после строк, содержащих минимальный элемент
- * @param array - указатель на исходный массив
- * @param n - количество строк в исходном массиве
- * @param m - количество столбцов в массиве
- * @param newN - ссылка на переменную для сохранения нового количества строк
- * @return int** - новый массив с вставленными строками
- * @details После каждой строки, содержащей минимальный элемент массива, 
- *          вставляется новая строка со значениями 2, 4, 6, 8, ...
+ * @brief Создает новый массив с вставленными строками
+ * @param array - исходный массив
+ * @param n - строк в исходном
+ * @param m - столбцов
+ * @param newN - итоговое количество строк (рассчитанное заранее)
+ * @return int** - указатель на новый массив
  */
-int** createArrayWithInsertedRows(int* const* const array, const size_t n, const size_t m, size_t& newN);
+int** createArrayWithInsertedRows(int* const* const array, const size_t n, const size_t m, const size_t newN);
 
+/**
+ * @brief Главная функция программы
+ * @return 0 если все успешно, 1 если ошибка
+ */
 int main() {
     cout << "=== РАБОТА С ДВУМЕРНЫМ МАССИВОМ n x m (ВАРИАНТ 15) ===" << endl;
     
@@ -108,294 +110,160 @@ int main() {
     // Создание массива с проверкой
     cout << "Создаем массив " << n << " x " << m << "..." << endl;
     int** originalArray = nullptr;
-    
     try {
         originalArray = createArray(n, m);
-        cout << "Память успешно выделена для массива размером " << n << " строк x " << m << " столбцов" << endl;
     } catch (const bad_alloc& e) {
-        cout << "Ошибка! Не удалось выделить память для массива." << endl;
-        cout << "Сообщение системы: " << e.what() << endl;
+        cout << "Ошибка выделения памяти!" << endl;
         return 1;
     }
-    
-    // Выбор способа заполнения (без цикла проверки)
-    cout << "\nВыберите способ заполнения массива:" << endl;
-    cout << FILL_MANUALLY << " - Ввод вручную" << endl;
-    cout << FILL_RANDOMLY << " - Заполнение случайными числами" << endl;
-    cout << "Ваш выбор (" << FILL_MANUALLY << " или " << FILL_RANDOMLY << "): ";
-    
-    int choice = 0;
-    cin >> choice;
-    
-    // Заполнение массива в зависимости от выбора
+
+    cout << "\nВыберите способ заполнения (1 - Ручной, 2 - Случайный): ";
+    int choice; cin >> choice;
+
     if (choice == FILL_MANUALLY) {
         fillArrayManually(originalArray, n, m);
-    } else if (choice == FILL_RANDOMLY) {
-        // Инициализация генератора случайных чисел только при необходимости
+    } else {
         srand(static_cast<unsigned>(time(nullptr)));
         fillArrayRandomly(originalArray, n, m);
-    } else {
-        cout << "Критическая ошибка: некорректный выбор заполнения!" << endl;
-        deleteArray(originalArray, n);
-        return 1;
     }
-    
-    // Вывод исходного массива
+
     cout << "\n=== ИСХОДНЫЙ МАССИВ ===" << endl;
     printArray(originalArray, n, m);
-    
-    // Находим минимальный элемент для второго задания
+
     int minElement = findMinElement(originalArray, n, m);
-    cout << "\nМинимальный элемент массива: " << minElement << endl;
-    
-    // 1. Замена максимальных элементов каждой строки номером столбца
-    cout << "\n=== ЗАДАНИЕ 1: ЗАМЕНА МАКСИМАЛЬНЫХ ЭЛЕМЕНТОВ ===" << endl;
-    cout << "Заменяем максимальный элемент каждой строки номером столбца, в котором он находится..." << endl;
-    
-    // Создаем копию для обработки
+    cout << "\nМинимальный элемент: " << minElement << endl;
+
+    // --- ЗАДАНИЕ 1 ---
     int** arrayCopy1 = createArray(n, m);
+    for (size_t i = 0; i < n; i++)
+        for (size_t j = 0; j < m; j++)
+            arrayCopy1[i][j] = originalArray[i][j];
+
+    replaceMaxWithColumnNumber(arrayCopy1, n, m);
+    cout << "\n=== РЕЗУЛЬТАТ ЗАДАНИЯ 1 ===" << endl;
+    printArray(arrayCopy1, n, m);
+
+    size_t extraRows = 0;
     for (size_t i = 0; i < n; i++) {
         for (size_t j = 0; j < m; j++) {
-            arrayCopy1[i][j] = originalArray[i][j];
+            if (originalArray[i][j] == minElement) {
+                extraRows++;
+                break; 
+            }
         }
     }
-    
-    replaceMaxWithColumnNumber(arrayCopy1, n, m);
-    
-    cout << "Результат преобразования:" << endl;
-    printArray(arrayCopy1, n, m);
-    
-    // 2. Вставка строк после строк, содержащих минимальный элемент
+
+    size_t newN = n + extraRows; // Меняем переменную непосредственно в main
+
     cout << "\n=== ЗАДАНИЕ 2: ВСТАВКА СТРОК ===" << endl;
-    cout << "Вставляем строки 2, 4, 6, ... после всех строк, содержащих минимальный элемент (" << minElement << ")..." << endl;
-    
-    // Создаем массив с вставленными строками
-    size_t newN = n;
     int** arrayCopy2 = createArrayWithInsertedRows(originalArray, n, m, newN);
-    
-    if (newN == n) {
-        cout << "Минимальный элемент не найден в массиве (невозможная ситуация)." << endl;
-    } else {
-        cout << "Результат (новый размер: " << newN << " строк x " << m << " столбцов):" << endl;
+
+    if (arrayCopy2) {
+        cout << "Новый размер: " << newN << " строк." << endl;
         printArray(arrayCopy2, newN, m);
         deleteArray(arrayCopy2, newN);
     }
-    
-    // Освобождение памяти исходного массива и копии
+
     deleteArray(originalArray, n);
     deleteArray(arrayCopy1, n);
-    
-    cout << "\n=== ПРОГРАММА УСПЕШНО ЗАВЕРШЕНА ===" << endl;
+
+    cout << "\n=== ПРОГРАММА ЗАВЕРШЕНА ===" << endl;
     return 0;
 }
 
-// Реализации функций
+// Реализация функций
 
 int** createArray(const size_t n, const size_t m) {
-    if (n == 0) {
-        throw invalid_argument("Количество строк должно быть положительным");
-    }
-    if (m == 0) {
-        throw invalid_argument("Количество столбцов должно быть положительным");
-    }
-    
     int** array = new int*[n];
     for (size_t i = 0; i < n; i++) {
         array[i] = new int[m];
     }
-    
     return array;
 }
 
 void deleteArray(int** array, const size_t n) {
     if (array == nullptr) return;
-    
-    for (size_t i = 0; i < n; i++) {
-        delete[] array[i];
-    }
+    for (size_t i = 0; i < n; i++) delete[] array[i];
     delete[] array;
 }
 
 void printArray(int* const* const array, const size_t n, const size_t m) {
-    if (array == nullptr) {
-        cout << "Массив пуст!" << endl;
-        return;
-    }
-    
-    // Вывод заголовков столбцов
-    cout << "       ";
-    for (size_t j = 0; j < m; j++) {
-        cout << setw(6) << "Стлб " << j + 1;
-    }
-    cout << endl;
-    
-    // Вывод разделительной линии
-    cout << "      +";
-    for (size_t j = 0; j < m; j++) {
-        cout << "------+";
-    }
-    cout << endl;
-    
-    // Вывод строк массива
+    if (!array) return;
     for (size_t i = 0; i < n; i++) {
         cout << "Стр " << setw(2) << i + 1 << " |";
         for (size_t j = 0; j < m; j++) {
             cout << setw(6) << array[i][j] << "|";
         }
         cout << endl;
-        
-        // Вывод разделительной линии между строками
-        if (i < n - 1) {
-            cout << "      +";
-            for (size_t j = 0; j < m; j++) {
-                cout << "------+";
-            }
-            cout << endl;
-        }
     }
-    
-    // Нижняя граница
-    cout << "      +";
-    for (size_t j = 0; j < m; j++) {
-        cout << "------+";
-    }
-    cout << endl;
 }
 
 void fillArrayManually(int** array, const size_t n, const size_t m) {
-    cout << "Введите элементы массива " << n << " x " << m << ":" << endl;
-    
     for (size_t i = 0; i < n; i++) {
-        cout << "Строка " << i + 1 << ":" << endl;
         for (size_t j = 0; j < m; j++) {
-            cout << "  Элемент [" << i + 1 << "][" << j + 1 << "]: ";
+            cout << "[" << i + 1 << "][" << j + 1 << "]: ";
             cin >> array[i][j];
         }
     }
-    cout << "Массив успешно заполнен вручную." << endl;
 }
 
 void fillArrayRandomly(int** array, const size_t n, const size_t m) {
-    int minValue = 0;
-    int maxValue = 0;
-    
-    cout << "Введите минимальное значение для случайных чисел: ";
-    cin >> minValue;
-    
-    cout << "Введите максимальное значение для случайных чисел: ";
-    cin >> maxValue;
-    
-    if (minValue > maxValue) {
-        cout << "Предупреждение: Минимальное значение больше максимального." << endl;
-        cout << "Меняю значения местами." << endl;
-        swap(minValue, maxValue);
-    }
-    
-    for (size_t i = 0; i < n; i++) {
-        for (size_t j = 0; j < m; j++) {
-            array[i][j] = rand() % (maxValue - minValue + 1) + minValue;
-        }
-    }
-    
-    cout << "Массив заполнен случайными числами в диапазоне [" 
-         << minValue << ", " << maxValue << "]" << endl;
+    for (size_t i = 0; i < n; i++)
+        for (size_t j = 0; j < m; j++)
+            array[i][j] = rand() % 50;
 }
 
 int findMinElement(int* const* const array, const size_t n, const size_t m) {
-    if (array == nullptr || n == 0 || m == 0) {
-        return 0;
-    }
-    
     int minVal = array[0][0];
-    
-    for (size_t i = 0; i < n; i++) {
-        for (size_t j = 0; j < m; j++) {
-            if (array[i][j] < minVal) {
-                minVal = array[i][j];
-            }
-        }
-    }
-    
+    for (size_t i = 0; i < n; i++)
+        for (size_t j = 0; j < m; j++)
+            if (array[i][j] < minVal) minVal = array[i][j];
     return minVal;
 }
 
 void replaceMaxWithColumnNumber(int** array, const size_t n, const size_t m) {
-    if (array == nullptr) return;
-    
-    // Для каждой строки находим максимальный элемент и заменяем его номером столбца
     for (size_t i = 0; i < n; i++) {
         int maxVal = array[i][0];
         size_t maxCol = 0;
-        
-        // Ищем максимальный элемент в строке
         for (size_t j = 1; j < m; j++) {
             if (array[i][j] > maxVal) {
                 maxVal = array[i][j];
                 maxCol = j;
             }
         }
-        
-        // Заменяем максимальный элемент номером столбца (нумерация с 1)
         array[i][maxCol] = static_cast<int>(maxCol + 1);
     }
 }
 
-int** createArrayWithInsertedRows(int* const* const array, const size_t n, const size_t m, size_t& newN) {
-    if (array == nullptr || n == 0 || m == 0) {
-        newN = n;
-        return nullptr;
-    }
-    
-    // Находим минимальный элемент
+int** createArrayWithInsertedRows(int* const* const array, const size_t n, const size_t m, const size_t newN) {
+    if (!array) return nullptr;
+
     int minVal = findMinElement(array, n, m);
-    
-    // Считаем, сколько строк содержат минимальный элемент
-    size_t rowsWithMin = 0;
-    for (size_t i = 0; i < n; i++) {
-        bool containsMin = false;
-        for (size_t j = 0; j < m; j++) {
-            if (array[i][j] == minVal) {
-                containsMin = true;
-                break;
-            }
-        }
-        if (containsMin) {
-            rowsWithMin++;
-        }
-    }
-    
-    // Новый размер массива
-    newN = n + rowsWithMin;
-    
-    // Создаем новый массив
     int** newArray = createArray(newN, m);
-    
-    // Копируем строки и вставляем новые после строк с минимальным элементом
-    size_t newRow = 0;
+
+    size_t currentRow = 0;
     for (size_t i = 0; i < n; i++) {
-        // Копируем текущую строку
+        // Копируем исходную строку
         for (size_t j = 0; j < m; j++) {
-            newArray[newRow][j] = array[i][j];
+            newArray[currentRow][j] = array[i][j];
         }
-        newRow++;
         
-        // Проверяем, содержит ли строка минимальный элемент
-        bool containsMin = false;
+        bool hasMin = false;
         for (size_t j = 0; j < m; j++) {
             if (array[i][j] == minVal) {
-                containsMin = true;
+                hasMin = true;
                 break;
             }
         }
-        
-        // Если содержит, вставляем новую строку 2, 4, 6, ...
-        if (containsMin && newRow < newN) {
+        currentRow++;
+
+        // Если в строке был минимум, вставляем новую строку (2, 4, 6...)
+        if (hasMin && currentRow < newN) {
             for (size_t j = 0; j < m; j++) {
-                newArray[newRow][j] = 2 * (j + 1);  // 2, 4, 6, 8, ...
+                newArray[currentRow][j] = 2 * (static_cast<int>(j) + 1);
             }
-            newRow++;
+            currentRow++;
         }
     }
-    
     return newArray;
 }
