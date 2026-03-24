@@ -206,16 +206,11 @@ double getSum(const double a, const double eps, const int maxIterations) {
     double element = a;
     int k = 1;  // Номер текущего элемента (начиная с 1 для второго элемента)
 
-    while (k < maxIterations) {
+    while (fabs(getFunc(a) - sum) <= eps) {
         double nextElem = nextElement(element, a, k);
 
         element = nextElem;
         sum += element;
-
-        // Проверяем реальную погрешность
-        if (fabs(getFunc(a) - sum) <= eps) {
-            break;
-        }
 
         k++;
     }
